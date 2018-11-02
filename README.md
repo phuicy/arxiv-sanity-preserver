@@ -78,8 +78,10 @@ The server will load the new files and begin hosting the site. Note that on some
 
 ## Docker instance
 
+```bash
 $ git clone https://github.com/bskaggs/arxiv-sanity-preserver
 $ cd arxiv-sanity-preserver/
 $ docker image build -t arxiv-sanity .
 $ docker exec arxiv-sanity pipeline.sh
 $ docker run arxiv-sanity
+```
