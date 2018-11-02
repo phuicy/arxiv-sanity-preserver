@@ -75,3 +75,11 @@ python serve.py --prod --port 80
 ```
 
 The server will load the new files and begin hosting the site. Note that on some systems you can't use port 80 without `sudo`. Your two options are to use `iptables` to reroute ports or you can use [setcap](http://stackoverflow.com/questions/413807/is-there-a-way-for-non-root-processes-to-bind-to-privileged-ports-1024-on-l) to elavate the permissions of your `python` interpreter that runs `serve.py`. In this case I'd recommend careful permissions and maybe virtualenv, etc.
+
+## Docker instance
+
+$ git clone https://github.com/bskaggs/arxiv-sanity-preserver
+$ cd arxiv-sanity-preserver/
+$ docker image build -t arxiv-sanity .
+$ docker exec arxiv-sanity pipeline.sh
+$ docker run arxiv-sanity
