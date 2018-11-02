@@ -2,8 +2,6 @@
 feedparser
 numpy
 scipy
-urllib2
-
 
 # sciki-learn is only for sparse arrays
 scikit-learn
