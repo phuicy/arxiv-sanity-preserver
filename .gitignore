@@ -8,5 +8,8 @@ as.db
 secret_key.txt
 env/
 data
+<<<<<<< HEAD
 *.DS_Store
 twitter.txt
+=======
+>>>>>>> 1d5f9f81fdbce2a4925fdc949e98253e99f14fba
