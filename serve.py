@@ -23,7 +23,7 @@ from utils import safe_pickle_dump, strip_version, isvalidid, Config
 
 # database configuration
 if os.path.isfile('secret_key.txt'):
-  SECRET_KEY = open('secret_key.txt', 'r').read()
+  SECRET_KEY = open('secret_key.txt', 'r', errors='ignore', encoding='utf-8').read()
 else:
   SECRET_KEY = 'devkey, should be in a file'
 app = Flask(__name__)
@@ -744,7 +744,7 @@ if __name__ == "__main__":
   SEARCH_DICT = cache['search_dict']
 
   print('connecting to mongodb...')
-  client = pymongo.MongoClient()
+  client = pymongo.MongoClient(host="mongodb", port=27017)
   mdb = client.arxiv
   tweets_top1 = mdb.tweets_top1
   tweets_top7 = mdb.tweets_top7
