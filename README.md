@@ -78,8 +78,10 @@ The server will load the new files and begin hosting the site. Note that on some
 
 ## Docker instance
 
+This is a docker instance of the server, that hosts all of the data in volumes. In theory, this would allow with sqlite, multiple servers to access the data concurrently. Although this is rather unnecessary for most work loads.
+
 ```bash
-$ git clone https://github.com/bskaggs/arxiv-sanity-preserver
+$ git clone https://github.com/phuicy/arxiv-sanity-preserver
 $ cd arxiv-sanity-preserver/
 $ docker image build -t arxiv-sanity .
 $ docker run arxiv-sanity ./pipeline.sh
@@ -87,3 +89,21 @@ $ docker-compose up
 ```
 
 You can create external volumes if you want.
+
+```bash
+$ docker volume create sanity
+$ docker volume create info
+$ docker volume create thumbs
+...
+$ docker run -v sanity:/arxiv/data -v info:/arxiv/info -v thumbs:/arxiv/static/thumbs arxiv-sanity ./pipeline.sh
+```
+
+This can be set up as a deamon, or as systemd service. 
+However, a cron job or timer for systemd must be set up to run:
+```bash
+$ docker run -v sanity:/arxiv/data -v info:/arxiv/info -v thumbs:/arxiv/static/thumbs arxiv-sanity ./pipeline.sh
+```
+every night or adequately regularly for your workflow.
+
+
+
