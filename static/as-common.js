@@ -130,9 +130,11 @@ function addPapers(num, dynamic) {
     if(pdf_link === p.link) { var pdf_url = pdf_link } // replace failed, lets fall back on arxiv landing page
     else { var pdf_url = pdf_link + '.pdf'; }
     ldiv.append('a').attr('href', pdf_url).attr('target', '_blank').html('pdf');
+    ldiv.append('span').classed('sim', true).append('a').attr('href', pdf_url).attr('style', 'color:'+discuss_color).html('pdf');
     // access arxiv-vanity url of the paper
     var vanity_link = "https://www.arxiv-vanity.com/papers/" + p.pid;
-    ldiv.append('a').attr('href', vanity_link).attr('target', '_blank').html('html on Arxiv-Vanity');
+    ldiv.append('span').classed('sim', true).attr('style', 'margin-left:5px; padding-left: 5px; border-left: 1px solid black;')
+                      .append('a').attr('href', vanity_link).attr('style', 'color:'+discuss_color).html('html on Arxiv-Vanity');
     
     // rank by tfidf similarity
     ldiv.append('br');
