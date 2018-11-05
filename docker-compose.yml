@@ -21,7 +21,7 @@ services:
         volumes:
             - arxiv-data:/arxiv/data
             - arxiv-info:/arxiv/info
-            - arxiv-thumbs:/static/thumbs
+            - arxiv-thumbs:/arxiv/static/thumbs
         ports:
             - 8080:8080
         links:
