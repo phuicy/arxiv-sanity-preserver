@@ -103,7 +103,7 @@ However, a cron job or timer for systemd must be set up to run:
 ```bash
 $ docker run -v sanity:/arxiv/data -v info:/arxiv/info -v thumbs:/arxiv/static/thumbs arxiv-sanity ./pipeline.sh
 ```
-every night or adequately regularly for your workflow.
+every night or whatever is adequate for your workflow.
 
 
 
