@@ -56,6 +56,16 @@
 	<div id="tittxt">
 		<h1>Arxivity</h1>
 		Serving the last {{ totpapers }} papers from cs.[CV|CL|LG|AI|NE]/stat.ML
+		  <div id="sbox">
+			 <form action="{{ search_url }}" method="get">
+				<input name="q" type="text" id="qfield">
+			  </form>
+			  <div id="search_hint"></div>
+			  <!-- RSS icon from https://upload.wikimedia.org/wikipedia/en/thumb/4/43/Feed-icon.svg/128px-Feed-icon.svg.png-->
+			  <a href="/recent_rss.xml">
+				<img src="static/rss.png" class="rss-icon" title="Click to subscribe to RSS feed." id="rss" style="width: 11px;">
+			  </a>
+		  </div>
 	</div>
 	</a>
 </div>
@@ -76,16 +86,6 @@
 <div id="banner">
   <div style="float:right;cursor:pointer;" id="xbanner">X</div>
   New to arxivity? Check out the <a href="https://youtu.be/S2GY3gh6qC8" target="_blank">introduction video</a>. 
-  <div id="sbox">
-     <form action="{{ search_url }}" method="get">
-		<input name="q" type="text" id="qfield">
-	  </form>
-	  <div id="search_hint"></div>
-	  <!-- RSS icon from https://upload.wikimedia.org/wikipedia/en/thumb/4/43/Feed-icon.svg/128px-Feed-icon.svg.png-->
-	  <a href="/recent_rss.xml">
-		<img src="static/rss.png" class="rss-icon" title="Click to subscribe to RSS feed." id="rss" style="width: 11px;">
-	  </a>
-  </div>
 </div>
 {% endif %}
 
