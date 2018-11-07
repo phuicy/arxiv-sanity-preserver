@@ -55,17 +55,11 @@
 	<a href="/">
 	<div id="tittxt">
 		<h1>Arxivity</h1>
-		Serving the last {{ totpapers }} papers from cs.[CV|CL|LG|AI|NE]/stat.ML
-		  <div id="sbox">
-			 <form action="{{ search_url }}" method="get">
-				<input name="q" type="text" id="qfield">
-			  </form>
-			  <div id="search_hint"></div>
-			  <!-- RSS icon from https://upload.wikimedia.org/wikipedia/en/thumb/4/43/Feed-icon.svg/128px-Feed-icon.svg.png-->
-			  <a href="/recent_rss.xml">
-				<img src="static/rss.png" class="rss-icon" title="Click to subscribe to RSS feed." id="rss" style="width: 11px;">
-			  </a>
-		  </div>
+		Serving the last {{ totpapers }} papers from cs.[CV|CL|LG|AI|NE]/stat.ML 
+		<!-- RSS icon from https://upload.wikimedia.org/wikipedia/en/thumb/4/43/Feed-icon.svg/128px-Feed-icon.svg.png-->
+		<a href="/recent_rss.xml">
+			<img src="static/rss.png" class="rss-icon" title="Click to subscribe to RSS feed." id="rss" style="width: 11px;">
+		</a>
 	</div>
 	</a>
 </div>
@@ -89,7 +83,12 @@
 </div>
 {% endif %}
 
-
+		  <div id="sbox">
+			 <form action="{{ search_url }}" method="get">
+				<input name="q" type="text" id="qfield">
+			  </form>
+			  <div id="search_hint"></div>
+		  </div>
 
 {% if show_prompt == "yes" %}
 <div id="prompt" style="background-color:#f6ff7a; padding:10px; width:980px; margin-left:auto; margin-right:auto; font-size:14px;">
