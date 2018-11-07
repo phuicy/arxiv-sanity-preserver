@@ -75,20 +75,21 @@
 {% if render_format == "recent" and g.user.username is not defined %}
 <div id="banner">
   <div style="float:right;cursor:pointer;" id="xbanner">X</div>
-  New to arxivity? Check out the <a href="https://youtu.be/S2GY3gh6qC8" target="_blank">introduction video</a>.
+  New to arxivity? Check out the <a href="https://youtu.be/S2GY3gh6qC8" target="_blank">introduction video</a>. 
+  <div id="sbox">
+     <form action="{{ search_url }}" method="get">
+		<input name="q" type="text" id="qfield">
+	  </form>
+	  <div id="search_hint"></div>
+	  <!-- RSS icon from https://upload.wikimedia.org/wikipedia/en/thumb/4/43/Feed-icon.svg/128px-Feed-icon.svg.png-->
+	  <a href="/recent_rss.xml">
+		<img src="static/rss.png" class="rss-icon" title="Click to subscribe to RSS feed." id="rss" style="width: 11px;">
+	  </a>
+  </div>
 </div>
 {% endif %}
 
-<div id="sbox">
-    <form action="{{ search_url }}" method="get">
-  	<input name="q" type="text" id="qfield">
-  </form>
-  <div id="search_hint"></div>
-  <!-- RSS icon from https://upload.wikimedia.org/wikipedia/en/thumb/4/43/Feed-icon.svg/128px-Feed-icon.svg.png-->
-  <a href="/recent_rss.xml">
-    <img src="static/rss.png" class="rss-icon" title="Click to subscribe to RSS feed." id="rss" style="width: 40px;">
-  </a>
-</div>
+
 
 {% if show_prompt == "yes" %}
 <div id="prompt" style="background-color:#f6ff7a; padding:10px; width:980px; margin-left:auto; margin-right:auto; font-size:14px;">
