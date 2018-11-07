@@ -1,4 +1,4 @@
-python fetch_papers.py 
+python fetch_papers.py $@
 python download_pdfs.py
 python parse_pdf_to_text.py
 python thumb_pdf.py

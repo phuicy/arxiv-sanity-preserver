@@ -23,7 +23,7 @@ from utils import safe_pickle_dump, strip_version, isvalidid, Config
 
 # database configuration
 if os.path.isfile('secret_key.txt'):
-  SECRET_KEY = open('secret_key.txt', 'r', errors='ignore', encoding='utf-8').read()
+SECRET_KEY = open('secret_key.txt', 'r', errors='ignore', encoding='utf-8').read()
 else:
   SECRET_KEY = 'devkey, should be in a file'
 app = Flask(__name__)
@@ -82,9 +82,15 @@ def teardown_request(exception):
 # -----------------------------------------------------------------------------
 
 def papers_search(qraw, ret_ids=False):
-  qparts = qraw.lower().strip().split() # split by spaces
   # use reverse index and accumulate scores
   scores = []
+
+  if isvalidid(qraw) is not None:
+    pid = qraw.split('v')[0]
+    if pid in db.keys():
+      scores.append((1, db[pid]))
+
+  qparts = qraw.lower().strip().split() # split by spaces
   for pid,p in db.items():
     score = sum(SEARCH_DICT[pid].get(q,0) for q in qparts)
     if score == 0:
@@ -225,7 +231,7 @@ class RssValues(object):
   def __init__(self, title, link, summary):
     self.title = title
     self.link = link
-    self.summary = summary
+        self.summary = summary
   def __repr__(self):
     return "%s at %s" % (self.title, self.link)
 
