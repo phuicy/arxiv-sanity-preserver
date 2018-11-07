@@ -23,7 +23,7 @@ from utils import safe_pickle_dump, strip_version, isvalidid, Config
 
 # database configuration
 if os.path.isfile('secret_key.txt'):
-SECRET_KEY = open('secret_key.txt', 'r', errors='ignore', encoding='utf-8').read()
+  SECRET_KEY = open('secret_key.txt', 'r', errors='ignore', encoding='utf-8').read()
 else:
   SECRET_KEY = 'devkey, should be in a file'
 app = Flask(__name__)
