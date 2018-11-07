@@ -231,7 +231,7 @@ class RssValues(object):
   def __init__(self, title, link, summary):
     self.title = title
     self.link = link
-        self.summary = summary
+    self.summary = summary
   def __repr__(self):
     return "%s at %s" % (self.title, self.link)
 
