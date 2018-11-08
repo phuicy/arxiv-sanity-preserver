@@ -321,6 +321,15 @@ def rank(request_pid=None):
   ctx = default_context(papers, render_format='paper')
   return render_template('main.html', **ctx)
 
+def recursively_thread_comments(comment, comments):
+     children = comment.children.copy()
+     comment.children.clear()
+     for child_id in children:
+          child = comments.find_one({"pid": comment.pid, "_id": child_id})
+          child = recursively_thread_comments(child, comments)
+          comment.children.insert(child)
+     return comment 
+
 @app.route('/discuss', methods=['GET'])
 def discuss():
   """ return discussion related to a paper """
@@ -328,10 +337,13 @@ def discuss():
   papers = [db[pid]] if pid in db else []
 
   # fetch the comments
-  comms_cursor = comments.find({ 'pid':pid }).sort([('time_posted', pymongo.DESCENDING)])
+  comms_cursor = comments.find({ 'pid':pid, 'parent': None }).sort([('time_posted', pymongo.DESCENDING)])
   comms = list(comms_cursor)
   for c in comms:
     c['_id'] = str(c['_id']) # have to convert these to strs from ObjectId, and backwards later http://api.mongodb.com/python/current/tutorial.html
+
+  # fetch the comments children, turn child ids to instances.     
+  comms[:] = [ recursively_thread_comments(c, comments) for c in comms ]
 
   # fetch the counts for all tags
   tag_counts = []
@@ -363,6 +375,9 @@ def comment():
     print(e)
     return 'bad pid. This is most likely Andrej\'s fault.'
 
+  #Getting Parent
+  parent_id = request.form.get('parent_id', None)
+
   # create the entry
   entry = {
     'user': username,
@@ -372,11 +387,20 @@ def comment():
     'anon': anon,
     'time_posted': time.time(),
     'text': request.form['text'],
+    'parent': parent_id
+    'children': []
   }
 
   # enter into database
   print(entry)
-  comments.insert_one(entry)
+  post_id = comments.insert_one(entry).inserted_id
+  print("Inserted Comment (" + str(post_id) + ") on Paper ("  + str(pid) + ") ")   
+  
+  # Add children to Parent
+  if parent_id is None:
+      parent = comments.find_one({"pid": pid, "_id": parent_id})
+      parent.children.insert(post_id)
+     
   return 'OK'
 
 @app.route("/discussions", methods=['GET'])
