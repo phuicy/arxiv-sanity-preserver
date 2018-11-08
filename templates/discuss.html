@@ -17,14 +17,9 @@ var tag_counts = {{ tag_counts | tojson }};
 
 var cid_highlight;
 var node_scroll_to;
-
-function renderComments() {
-  var root = d3.select("#discussion");
-  var n = comments.length;
-  if(n === 0) { root.append('div').html('none, so far.'); }
-  for(var i=0;i<n;i++) {
-    // show the comment
-    var c = comments[i];
+	
+	
+function renderNestedComments( root , c ) {
     if(typeof c.text === 'undefined') { var text = ''; } else { var text = c.text; }
     var time_text = timeConverter(c.time_posted);
     var cdiv = root.append('div').classed('comment', true);
@@ -42,6 +37,7 @@ function renderComments() {
     cdiv_header.append('div').classed('ctime', true).html(time_text);
     cdiv_header.append('div').classed('cver', true).html('v'+c.version);
     cdiv_header.append('div').classed('cconf', true).html(c.conf);
+    cdiv_header.append('div').classed('creply', true).html('Reply');
     // actual comment
     cdiv.append('div').classed('ctext', true).html(marked(text));
     // tags
@@ -75,6 +71,26 @@ function renderComments() {
         });
       }}(cdiv_tag, cdiv_tag_count, c._id, cerr));
     }
+    var ul = cdiv.append('ul').classed('commentList', true);
+    var children = c.children;
+    for ( var child_iterate=0, child_iterate < children.length, child_iterate++ )
+    {
+	var child = children[child_iterate];
+	var li = ul.append('li').classed('commentListItem', true);
+	renderNestedComments(li, child);
+    }
+}
+
+function renderComments() {
+  var root = d3.select("#discussion");
+  var n = comments.length;
+  if(n === 0) { root.append('div').html('none, so far.'); }
+  var ul = root.append('ul').classed('baseCommentList', true);
+  for(var i=0;i<n;i++) {
+    // show the comment
+    var c = comments[i];
+    var li = ul.append('li').classed('baseCommentListItem', true);
+    renderNestedComments(li, c);
   }
 }
 
