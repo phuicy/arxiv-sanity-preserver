@@ -407,12 +407,12 @@ def comment():
   print(entry)
   post_id = comments.insert_one(entry).inserted_id
   debug_message = "Inserted Comment (" + str(post_id) + ") on Paper ("  + str(pid) + ") "
-  if parent_id is not None:
+  if parent_id is not '':
     debug_message += "with parent comment " + str(parent_id)
   app.logger.debug(debug_message)    
   
   # Add children to Parent
-  if parent_id is not None:
+  if parent_id is not '':
       parent = comments.find_one({"pid": pid, "_id": parent_id})
       parent.children.insert(post_id)
   
