@@ -367,9 +367,11 @@ def discuss():
 def comment():
   """ user wants to post a comment """
   print("Posted comment.")
-  print(request.data)
-  anon = int(request.form['anon'])
-
+  if "anon" in request.form.keys():
+    anon = True
+  else:
+    anon = False
+  
   if g.user and (not anon):
     username = get_username(session['user_id'])
   else:
