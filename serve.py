@@ -343,7 +343,7 @@ def discuss():
   papers = [db[pid]] if pid in db else []
 
   # fetch the comments
-  comms_cursor = comments.find({ 'pid':pid, 'parent': None }).sort([('time_posted', pymongo.DESCENDING)])
+  comms_cursor = comments.find({ 'pid':pid, 'parent': '' }).sort([('time_posted', pymongo.DESCENDING)])
   comms = list(comms_cursor)
   for c in comms:
     c['_id'] = str(c['_id']) # have to convert these to strs from ObjectId, and backwards later http://api.mongodb.com/python/current/tutorial.html
