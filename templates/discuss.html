@@ -135,7 +135,11 @@ $(document).ready(function(){
 			<div class="piitemdo">- <b>DON'T</b>: Post generic comments of little value, e.g. "this is great.", "nice", etc.</div>
 			<div class="piitemdo">- <b>DON'T</b>: Troll, call people names, be disrespectful. Pretty please.</div>
 		</div>
-		<textarea rows='3' name=comment></textarea>
+		<!-- form for submitting a new discussion -->
+		<div style="border-top:1px solid black; margin-top:5px; padding-top:5px;">
+			<textarea id="post-text" rows="15" style="width: 98.5%;font-size: 16px;padding: 6px 6px;color: #333;line-height1.42857143:;border: 1px solid #ccc;box-shadow: inset 0 1px 1px rgba(0,0,0,.075);overflow: auto;border-radius: 4px;margin-top: 4px;"></textarea>
+			<div style="color:#555">(You can use $\LaTeX$ and markdown)</div>
+		</div>
 		<input type="hidden" name="parent_id" value="{{ id }}" />
 		<input type="hidden" name="pid" value="{{ gpid }}" />
 		<br>
@@ -144,12 +148,14 @@ $(document).ready(function(){
 			<div id="preview" style="background-color: #fff;padding: 5px;border: 1px solid #999;"></div>
 		</div>
 		<br>
-		On this paper's topic, I am:
-		<input type="radio" name="conf" value="expert"> expert
-		<input type="radio" name="conf" value="confident"> confident
-		<input type="radio" name="conf" value="uncertain" checked="checked"> uncertain
-		<br>
-		<input type="checkbox" name="anon" value="anon"> Post anonymously
+		<div style="background-color: #eee; padding:5px;">
+			On this paper's topic, I am:
+			<input type="radio" name="conf" value="expert"> expert
+			<input type="radio" name="conf" value="confident"> confident
+			<input type="radio" name="conf" value="uncertain" checked="checked"> uncertain
+			<br>
+			<input type="checkbox" name="anon" value="anon"> Post anonymously
+		</div>
 		<button class="btn-primary">Submit</button>
 		<button class="btn-primary">Cancel</button>
 	</form>
