@@ -328,12 +328,12 @@ def rank(request_pid=None):
   return render_template('main.html', **ctx)
 
 def recursively_thread_comments(comment, comments):
-     children = comment.children.copy()
-     comment.children.clear()
-     for child_id in children:
-          child = comments.find_one({"pid": comment.pid, "_id": child_id})
-          child = recursively_thread_comments(child, comments)
-          comment.children.insert(child)
+	children = comment['children'].copy()
+	comment['children'].clear()
+	for child_id in children:
+		child = comments.find_one({"pid": comment.pid, "_id": child_id})
+		child = recursively_thread_comments(child, comments)
+		comment['children'].insert(child)
      return comment 
 
 @app.route('/discuss', methods=['GET'])
