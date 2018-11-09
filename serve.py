@@ -357,9 +357,8 @@ def discuss():
     cc = [tags_collection.count({ 'comment_id':c['_id'], 'tag_name':t }) for t in TAGS]
     c['tag_counts'] = cc
     c['tags'] = TAGS
-    
-   msg = ''
-   
+  msg = ''
+
   # and render
   ctx = default_context(papers, render_format='default', comments=comms, gpid=pid, msg=msg )
   return render_template('discuss.html', **ctx)
@@ -367,6 +366,8 @@ def discuss():
 @app.route('/comment', methods=['POST'])
 def comment():
   """ user wants to post a comment """
+  print("Posted comment.")
+  print(request.data)
   anon = int(request.form['anon'])
 
   if g.user and (not anon):

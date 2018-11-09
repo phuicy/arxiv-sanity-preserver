@@ -2,6 +2,8 @@
 
 {% block header_content %}
 
+<script src="{{ url_for('static', filename='marked.min.js') }}"></script>
+
 <style>
 	div.comment-section {
 		margin-left: -50px;
@@ -44,6 +46,7 @@ var papers = {{ papers | tojson }};
 var comments = {{ comments | tojson }};
 var render_format = "{{ render_format }}";
 var username = "{{ g.user.username }}";
+var msg = "{{ msg }}";
 
 
 var cid_highlight;
@@ -125,7 +128,7 @@ $(document).ready(function(){
 {% macro render_comment_box(id, gpid) -%}
 
 	<!-- functionality to add new comments -->
-	<form action="/comment" method="post" class="comment-form">
+	<form action="{{ url_for('comment') }}" method="post" class="comment-form">
 		<div>
 			<div class="piitemdo">- <b>DO</b>: Add helpful links to code, project page, or related discussion.</div>
 			<div class="piitemdo">- <b>DO</b>: Offer <u>constructive</u> comments on this work.</div>
@@ -144,7 +147,7 @@ $(document).ready(function(){
 		On this paper's topic, I am:
 		<input type="radio" name="conf" value="expert"> expert
 		<input type="radio" name="conf" value="confident"> confident
-		<input type="radio" name="conf" value="uncertain"> uncertain
+		<input type="radio" name="conf" value="uncertain" checked="checked"> uncertain
 		<br>
 		<input type="checkbox" name="anon" value="anon"> Post anonymously
 		<button class="btn-primary">Submit</button>
