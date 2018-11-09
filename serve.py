@@ -32,6 +32,11 @@ app.config.from_object(__name__)
 limiter = Limiter(app, global_limits=["100 per hour", "20 per minute"])
 
 # -----------------------------------------------------------------------------
+# Jinja Config
+# -----------------------------------------------------------------------------
+app.jinja_env.filters['markdownify'] = markdown2.markdown
+
+# -----------------------------------------------------------------------------
 # utilities for database interactions 
 # -----------------------------------------------------------------------------
 # to initialize the database: sqlite3 as.db < schema.sql
