@@ -6,6 +6,7 @@ import argparse
 import datetime
 import dateutil.parser
 from random import shuffle, randrange, uniform
+import markdown2
 
 import numpy as np
 from sqlite3 import dbapi2 as sqlite3
@@ -388,8 +389,8 @@ def comment():
     'anon': anon,
     'time_posted': time.time(),
     'text': request.form['text'],
-    'parent': parent_id
-    'children': []
+    'parent': parent_id,
+    'children': [],
   }
 
   # enter into database

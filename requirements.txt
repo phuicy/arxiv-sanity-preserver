@@ -5,6 +5,7 @@ scipy
 
 # sciki-learn is only for sparse arrays
 scikit-learn
+markdown2
 
 # twitter
 python-twitter
