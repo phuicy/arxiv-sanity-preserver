@@ -343,7 +343,7 @@ def discuss():
   papers = [db[pid]] if pid in db else []
 
   # fetch the comments
-  comms_cursor = comments.find({ 'pid':pid, 'parent': '' }).sort([('time_posted', pymongo.DESCENDING)])
+  comms_cursor = comments.find({ 'pid':pid, 'parent': None }).sort([('time_posted', pymongo.DESCENDING)])
   comms = list(comms_cursor)
   for c in comms:
     c['_id'] = str(c['_id']) # have to convert these to strs from ObjectId, and backwards later http://api.mongodb.com/python/current/tutorial.html
@@ -366,7 +366,6 @@ def discuss():
 @app.route('/comment', methods=['POST'])
 def comment():
   """ user wants to post a comment """
-  print("Posted comment.")
   if "anon" in request.form.keys():
     anon = True
   else:
@@ -404,15 +403,14 @@ def comment():
   }
 
   # enter into database
-  print(entry)
   post_id = comments.insert_one(entry).inserted_id
   debug_message = "Inserted Comment (" + str(post_id) + ") on Paper ("  + str(pid) + ") "
-  if parent_id is not '':
+  if parent_id is not None:
     debug_message += "with parent comment " + str(parent_id)
   app.logger.debug(debug_message)    
   
   # Add children to Parent
-  if parent_id is not '':
+  if parent_id is not None:
       parent = comments.find_one({"pid": pid, "_id": parent_id})
       parent.children.insert(post_id)
   
