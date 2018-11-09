@@ -350,8 +350,8 @@ def discuss():
   for c in comms:
     cc = [tags_collection.count({ 'comment_id':c['_id'], 'tag_name':t }) for t in TAGS]
     c['tag_counts'] = cc
-	c['tags'] = TAGS
-
+    c['tags'] = TAGS
+    
   # and render
   ctx = default_context(papers, render_format='default', comments=comms, gpid=pid )
   return render_template('discuss.html', **ctx)
