@@ -18,5 +18,5 @@ EXPOSE 8080
 VOLUME [ "/arxiv/data", "/arxiv/info", "/arxiv/static/thumbs" ]
 
 ENTRYPOINT ["./docker.sh"]
-CMD ["python", "serve.py", "--prod", "--port", "8080"]
+CMD ["python", "serve.py", "--port", "8080"]
 

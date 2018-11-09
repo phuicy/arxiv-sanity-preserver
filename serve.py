@@ -817,5 +817,5 @@ if __name__ == "__main__":
     IOLoop.instance().start()
   else:
     print('starting flask!')
-    app.debug = False
+    app.debug = True
     app.run(port=args.port, host='0.0.0.0')
