@@ -349,10 +349,11 @@ def discuss():
   tag_counts = []
   for c in comms:
     cc = [tags_collection.count({ 'comment_id':c['_id'], 'tag_name':t }) for t in TAGS]
-    tag_counts.append(cc);
+    c['tag_counts'] = cc
+	c['tags'] = TAGS
 
   # and render
-  ctx = default_context(papers, render_format='default', comments=comms, gpid=pid, tags=TAGS, tag_counts=tag_counts)
+  ctx = default_context(papers, render_format='default', comments=comms, gpid=pid )
   return render_template('discuss.html', **ctx)
 
 @app.route('/comment', methods=['POST'])

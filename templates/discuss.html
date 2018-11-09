@@ -1,8 +1,71 @@
 {% extends 'base.html' %}
 
 {% block header_content %}
-<script>
 
+<style>
+	body {
+		padding:10px;
+	}
+	div.comment-section {
+		margin-left: -50px;
+	}
+	div.comment-group {
+		margin-left: 50px;
+		padding-left: 10px;
+		border-left-style: dashed;
+		border-left-color: pink;
+	}
+	div.comment-submit {
+		display: none;
+	}
+	.table
+	{
+		width:50px;
+	}
+	.format-help
+	{
+		display: none;
+	}
+	.comment-form
+	{
+		display:inline;
+	}
+	tr.title
+	{
+		background-color:pink;
+	}
+	#thumbs_blue
+	{
+		width:25px;
+		height:25px;
+		display:block;
+		position:relative;
+		z-index: 2;
+	}
+	#thumbs_gold
+	{
+		width:25px;
+		height:25px;
+		display:block;
+		position:relative;
+		z-index: 1;
+		display:none;
+	}
+	.images
+	{
+		float:left;
+	}
+	.comment-scroll
+	{
+		float:left;
+	}
+	#comments
+	{
+		display:none;
+	}
+</style>
+
+<script>
 // passed in from flask as json
 var tweets = {{ tweets | tojson }};
 var papers = {{ papers | tojson }};
@@ -18,82 +81,7 @@ var tag_counts = {{ tag_counts | tojson }};
 var cid_highlight;
 var node_scroll_to;
 	
-	
-function renderNestedComments( root , c ) {
-    if(typeof c.text === 'undefined') { var text = ''; } else { var text = c.text; }
-    var time_text = timeConverter(c.time_posted);
-    var cdiv = root.append('div').classed('comment', true);
-    // add action items
-    cdiv.append('div').classed('caction', true)
-        .append('a').attr('href', 'discuss?id='+gpid+'&cid='+c._id)
-        .append('img').attr('src', 'static/linkto.png').attr('alt', 'link to this comment');
-    // header information: user/time/version
-    var cdiv_header = cdiv.append('div').classed('cheader', true);
-    if(typeof cid_highlight !== 'undefined' && cid_highlight === c._id) {
-      cdiv_header.attr('style', 'background-color:#ff0'); // highlight this comment specifically
-      node_scroll_to = cdiv_header[0][0]; // raw dom element
-    }
-    cdiv_header.append('div').classed('cuser', true).html('@'+c.user);
-    cdiv_header.append('div').classed('ctime', true).html(time_text);
-    cdiv_header.append('div').classed('cver', true).html('v'+c.version);
-    cdiv_header.append('div').classed('cconf', true).html(c.conf);
-    cdiv_header.append('div').classed('creply', true).html('Reply');
-    // actual comment
-    cdiv.append('div').classed('ctext', true).html(marked(text));
-    // tags
-    var cdiv_tags = cdiv.append('div').classed('ctags', true);
-    // error div
-    var cerr = cdiv.append('div').classed('cerr', true); // hidden initially
-    // now insert tags into tags div
-    for(var j=0,m=tags.length;j<m;j++) {
-      var tag_count = tag_counts[i][j];
-      var cdiv_tag_count = cdiv_tags.append('div').classed('ctag-count', true).html(tag_count);
-      if(tag_count === 0) { cdiv_tag_count.classed('ctag-count-zero', true); }
-      var cdiv_tag = cdiv_tags.append('div').classed('ctag', true).html(tags[j]);
-      // attach a click handler
-      cdiv_tag.on('click', function(elt, celt, cid, errelt){return function(){
-        // inform the server with a POST request
-        var request_data = {}
-        request_data.tag_name = elt.html();
-        request_data.comment_id = cid;
-        request_data.pid = gpid;
-        $.post("/toggletag", request_data).done(function(data){
-          if(data != 'OK') { errelt.html(data); }
-          else {
-            // toggle the visual state
-            var is_active = !elt.classed('ctag-active');
-            elt.classed('ctag-active', is_active);
-            // also (de/in)crement the count
-            var new_count = parseInt(celt.html()) + (is_active ? 1.0 : -1.0);
-            if(new_count < 0) { new_count = 0; } // should never happen
-            celt.html(new_count);
-          }
-        });
-      }}(cdiv_tag, cdiv_tag_count, c._id, cerr));
-    }
-    var ul = cdiv.append('ul').classed('commentList', true);
-    var children = c.children;
-    for ( var child_iterate=0, child_iterate < children.length, child_iterate++ )
-    {
-	var child = children[child_iterate];
-	var li = ul.append('li').classed('commentListItem', true);
-	renderNestedComments(li, child);
-    }
-}
-
-function renderComments() {
-  var root = d3.select("#discussion");
-  var n = comments.length;
-  if(n === 0) { root.append('div').html('none, so far.'); }
-  var ul = root.append('ul').classed('baseCommentList', true);
-  for(var i=0;i<n;i++) {
-    // show the comment
-    var c = comments[i];
-    var li = ul.append('li').classed('baseCommentListItem', true);
-    renderNestedComments(li, c);
-  }
-}
-
+//Render post preview.
 var prev_txt = '';
 function renderPost() {
   var txt = $("#post-text").val(); // raw text of textarea contents
@@ -111,87 +99,157 @@ function renderPost() {
   if (typeof MathJax !== 'undefined') { MathJax.Hub.Queue(["Typeset",MathJax.Hub]); }
 }
 
-function doPost() {
-  // lets put together a POST request to submit a new post in the discussion.
-  var txt = $("#post-text").val();
-  // do some checks etc
-  if(txt.length <= 5) {
-    $("#errors-etc").html('Post is too short. Come on, what are you doing?').slideDown("fast");
-    return;
-  }
-  if(txt.length > 10000) {
-    $("#errors-etc").html('Post is too long! What are you doing?').slideDown("fast");
-    return;
-  }
 
-  var conf = '';
-  var sel = document.querySelector('input[name="conf"]:checked');
-  if(sel !== null) { conf = sel.value; }
-
-  var anon = 0;
-  var sel = document.querySelector('input[name="anon"]:checked');
-  if(sel !== null) { anon = 1; }
-
-  var request_data = {}
-  request_data.text = txt;
-  request_data.conf = conf;
-  request_data.anon = anon;
-  request_data.pid = gpid;
-  console.log('request data:');
-  console.log(request_data);
-
-  $.post("/comment", request_data)
-   .done(function(data){
-      // toggle state of the image to reflect the state of the server, as reported by response
-      if(data === 'OK') {
-        $("#errors-etc").html('Posted!').slideDown("fast");
-        setInterval(function(){location.reload(false);}, 1000);
-      } else {
-        $("#errors-etc").html(data).slideDown("fast");
-      }
-   })
-   .fail(function(xhr, status, error) {
-      console.log(xhr);
-      console.log(status);
-      console.log(error);
-      $("#errors-etc").html('Request failed, sorry. See console to maybe debug.').slideDown("fast");
-   });
+function toggle_it(elm)
+{
+	var element =  $(elm).closest('.comment-group')
+			.find('#comments')
+	element.toggle('fast');
 }
 
 // when page loads...
 $(document).ready(function(){
 
-  cid_highlight = QueryString.cid;
+	cid_highlight = QueryString.cid;
 
-  // display message, if any
-  if(msg !== '') { d3.select("#rtable").append('div').classed('msg', true).html(msg); }
-  // display the subject-of-disussion paper on top
+	// display message, if any
+	if(msg !== '') { d3.select("#rtable").append('div').classed('msg', true).html(msg); }
+	// display the subject-of-disussion paper on top
 	addPapers(1, false);
-  // display the comments
-  renderComments();
 
-  // click on Pitch in! call for action toggle expansion of comment textarea etc
-  $("#pitchin-cfa").click(function() {
-    $("#pitchin").slideToggle("fast", function() { });
-  });
 
-  $("#btnpost").click(function(){
-    doPost();
-  })
-  // periodically try to render a preview of the post
-  setInterval(renderPost, 250);
+	// click on Pitch in! call for action toggle expansion of comment textarea etc
+	$("#pitchin-cfa").click(function() {
+		$("#pitchin").slideToggle("fast", function() { });
+	});
+  
+	$('.toggling').click(function() {
+		toggle_it(this);
+	})
+	$('div.comment-scroll').click(function() {
+		var group = $(this).closest('.comment-group'),
+				nextgroup = group.parent().closest('.comment-group');
+		if (nextgroup.length) {
+			group = nextgroup;
+		}
+		$('html, body').animate({
+			scrollTop: group.offset().top + 'px',
+		});
+	});
+  
+	// periodically try to render a preview of the post 
+	// TODO: only do if comment box open
+	setInterval(renderPost, 250);
 
-  // scroll to a comment if any
-  if(typeof node_scroll_to !== 'undefined') {
-    $('html, body').animate({
-        scrollTop: $(node_scroll_to).offset().top
-    }, 1000);
-  }
+	// scroll to a comment if any
+	if(typeof node_scroll_to !== 'undefined') {
+		$('html, body').animate({
+			scrollTop: $(node_scroll_to).offset().top
+		}, 1000);
+	}
 });
 
 </script>
 
 {% endblock %}
+
+
+{% macro render_comment_box(id, gpid) -%}
+
+	<!-- functionality to add new comments -->
+	<form action="/comment" method="post" class="comment-form">
+		<div>
+			<div class="piitemdo">- <b>DO</b>: Add helpful links to code, project page, or related discussion.</div>
+			<div class="piitemdo">- <b>DO</b>: Offer <u>constructive</u> comments on this work.</div>
+			<div class="piitemdo">- <b>DON'T</b>: Post generic comments of little value, e.g. "this is great.", "nice", etc.</div>
+			<div class="piitemdo">- <b>DON'T</b>: Troll, call people names, be disrespectful. Pretty please.</div>
+		</div>
+		<textarea rows='3' name=comment></textarea>
+		<input type="hidden" name="parent_id" value="{{ id }}" />
+		<input type="hidden" name="pid" value="{{ gpid }}" />
+		<br>
+		<div id="preview-wrap" style="display:none; margin-bottom:5px;">
+			<div style="margin-top: 5px;padding-top: 5px;font-size: 20px;">Live preview:</div>
+			<div id="preview" style="background-color: #fff;padding: 5px;border: 1px solid #999;"></div>
+		</div>
+		<br>
+		On this paper's topic, I am:
+		<input type="radio" name="conf" value="expert"> expert
+		<input type="radio" name="conf" value="confident"> confident
+		<input type="radio" name="conf" value="uncertain"> uncertain
+		<br>
+		<input type="checkbox" name="anon" value="anon"> Post anonymously
+		<button class="btn-primary">Submit</button>
+		<button class="btn-primary">Cancel</button>
+	</form>
+
+{%- endmacro %}
+
+{% macro render_comment(comment, level=0) -%}
+<div class="comment-group">
+	<div class="comment-container" id="{{comment._id}}">
+		<!-- Comment scroll -->	
+		<div class="comment">
+			<div class="caction">
+				<a href="discuss?id={{comment.gpid}}&cid={{ comment._id }}">
+					<img src="static/linkto.png" alt="link to this comment">
+				</a>
+			</div>
+			<div class="cheader">
+				<div class="cuser">@{{ comment.user }}</div>
+				<div class="ctime">{{ comment.time_posted.strftime('%A, %d. %B %Y %I:%M %p') }}</div>
+				<div class="cver">v{{ comment.version }}</div>
+				<div class="cconf">{{ comment.conf }}</div>
+			</div>
+			<div class="ctext">
+				{{ comment.text|markdownify|safe }}
+			</div>
+			<div class="ctags">
+				{% for i in comment.tags|length %}
+					<div class="ctag-count {% if comment.tag_counts[i]|length == 0 %}ctag-count-zero{% endif %} ">
+					<form action="/toggletag" method="post">
+						<input type="hidden" name="comment._id" value="{{ id }}" />
+						<input type="hidden" name="pid" value="{{ gpid }}" />
+						<input type="hidden" name="tag_name" value="{{ comment.tag[i] }}" />
+						<button type="submit" class="ctag">{{ comment.tag[i] }}</button>
+					</form>
+				{% endfor %}
+			</div>
+			<div class="cerr"></div>
+			
+			<!-- Reply -->
+			{% if level %}
+			<div class="comment-scroll">
+				<button class="button-primary">Scroll to parent</button>
+			</div>
+			{% endif %}
+			<div class="comment-reply">
+				<button class="btn-primary comment-reply">Reply</button>
+			</div>
+
+			<!-- Textarea and submit -->
+			<div class="comment-submit">
+				{{ render_comment_box(comment._id , comment.gpid) }}
+			</div>		
+		</div>
+	</div>
+	<!-- Render children -->
+
+	{% for child in comment.children %}
+		{% if loop.first and comment.children|length > 2 %}
+		<div id="comments">
+		{% endif %}
+		{{ render_comment(child, level + 1) }}
+		{% if loop.last and comment.children|length > 2 %}
+		</div>
+		<button type="button" class="toggling"> show/hide replies </button>
+		{% endif %}
+
+	{% endfor %}
+
+</div>
+
+{%- endmacro %}
 
 
 {% block content %}
@@ -202,42 +260,17 @@ $(document).ready(function(){
   <!-- functionality to add new comments -->
   <div id="pitchin-cfa" style="background-color:#d7e5ff; padding: 10px; margin-top: 5px; border: 1px solid #b7c5e0; cursor: pointer;">Pitch in!</div>
   <div id="pitchin" style="padding: 5px 5px 10px 5px; border-radius: 0px 0px 5px 5px; display: none;">
-    <div>
-      <div class="piitemdo">- <b>DO</b>: Add helpful links to code, project page, or related discussion.</div>
-      <div class="piitemdo">- <b>DO</b>: Offer <u>constructive</u> comments on this work.</div>
-      <div class="piitemdo">- <b>DON'T</b>: Post generic comments of little value, e.g. "this is great.", "nice", etc.</div>
-      <div class="piitemdo">- <b>DON'T</b>: Troll, call people names, be disrespectful. Pretty please.</div>
-    </div>
-    <div>
-      <!-- form for submitting a new discussion -->
-      <div style="border-top:1px solid black; margin-top:5px; padding-top:5px;">
-        <textarea id="post-text" rows="15" style="width: 98.5%;font-size: 16px;padding: 6px 6px;color: #333;line-height1.42857143:;border: 1px solid #ccc;box-shadow: inset 0 1px 1px rgba(0,0,0,.075);overflow: auto;border-radius: 4px;margin-top: 4px;"></textarea>
-        <div style="color:#555">(You can use $\LaTeX$ and markdown)</div>
-      </div>
-      <div>
-        <div id="preview-wrap" style="display:none; margin-bottom:5px;">
-          <div style="margin-top: 5px;padding-top: 5px;font-size: 20px;">Live preview:</div>
-          <div id="preview" style="background-color: #fff;padding: 5px;border: 1px solid #999;"></div>
-        </div>
-        <div style="background-color: #eee; padding:5px;">
-          <form action="">
-            On this paper's topic, I am:
-            <input type="radio" name="conf" value="expert"> expert
-            <input type="radio" name="conf" value="confident"> confident
-            <input type="radio" name="conf" value="uncertain"> uncertain
-            <br>
-            <input type="checkbox" name="anon" value="anon"> Post anonymously
-          </form>
-        </div>
-        <div><button id="btnpost" style="margin-top:5px;" class="ppbutton">Post</button></div>
-        <div id="errors-etc" style="display:none; background-color:#fee; padding:5px; margin-top:5px;"></div>
-      </div>
-    </div>
+    {{ render_comment_box("", gpid) }}
   </div>
 
   <!-- contains the discussion -->
   <div id="discussion">
     <div style="padding:5px; margin-top:10px; font-size:20px;">Discussion:</div>
+	<div class="comment-section">
+        {% for comment in comments %}
+            {{ render_comment(comment) }}
+        {% endfor %}
+    </div>
   </div>
 </div>
 
