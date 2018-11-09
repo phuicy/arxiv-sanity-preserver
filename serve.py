@@ -358,8 +358,10 @@ def discuss():
     c['tag_counts'] = cc
     c['tags'] = TAGS
     
+   msg = ''
+   
   # and render
-  ctx = default_context(papers, render_format='default', comments=comms, gpid=pid )
+  ctx = default_context(papers, render_format='default', comments=comms, gpid=pid, msg=msg )
   return render_template('discuss.html', **ctx)
 
 @app.route('/comment', methods=['POST'])

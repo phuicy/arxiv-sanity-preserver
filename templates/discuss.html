@@ -3,9 +3,6 @@
 {% block header_content %}
 
 <style>
-	body {
-		padding:10px;
-	}
 	div.comment-section {
 		margin-left: -50px;
 	}
@@ -22,10 +19,6 @@
 	{
 		width:50px;
 	}
-	.format-help
-	{
-		display: none;
-	}
 	.comment-form
 	{
 		display:inline;
@@ -33,27 +26,6 @@
 	tr.title
 	{
 		background-color:pink;
-	}
-	#thumbs_blue
-	{
-		width:25px;
-		height:25px;
-		display:block;
-		position:relative;
-		z-index: 2;
-	}
-	#thumbs_gold
-	{
-		width:25px;
-		height:25px;
-		display:block;
-		position:relative;
-		z-index: 1;
-		display:none;
-	}
-	.images
-	{
-		float:left;
 	}
 	.comment-scroll
 	{
@@ -263,6 +235,9 @@ $(document).ready(function(){
   <div id="discussion">
     <div style="padding:5px; margin-top:10px; font-size:20px;">Discussion:</div>
 	<div class="comment-section">
+		{%  if comments|length ==0 %}
+			<p> Nothing here yet. </p>
+		{% endif %}
         {% for comment in comments %}
             {{ render_comment(comment) }}
         {% endfor %}
