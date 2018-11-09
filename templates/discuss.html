@@ -70,6 +70,12 @@ function renderPost() {
   if (typeof MathJax !== 'undefined') { MathJax.Hub.Queue(["Typeset",MathJax.Hub]); }
 }
 
+function add_submit_btn(elm) {
+	$(elm)
+		.closest('.comment-container')
+		.find('.comment-reply, .comment-submit')
+		.toggle();
+}
 
 function toggle_it(elm)
 {
@@ -118,6 +124,10 @@ $(document).ready(function(){
 			scrollTop: $(node_scroll_to).offset().top
 		}, 1000);
 	}
+	
+	$('div.comment-reply button').click(function() {
+		add_submit_btn(this);
+    });
 });
 
 </script>
@@ -137,7 +147,7 @@ $(document).ready(function(){
 		</div>
 		<!-- form for submitting a new discussion -->
 		<div style="border-top:1px solid black; margin-top:5px; padding-top:5px;">
-			<textarea id="post-text" rows="15" style="width: 98.5%;font-size: 16px;padding: 6px 6px;color: #333;line-height1.42857143:;border: 1px solid #ccc;box-shadow: inset 0 1px 1px rgba(0,0,0,.075);overflow: auto;border-radius: 4px;margin-top: 4px;"></textarea>
+			<textarea name="text" id="post-text" rows="15" style="width: 98.5%;font-size: 16px;padding: 6px 6px;color: #333;line-height1.42857143:;border: 1px solid #ccc;box-shadow: inset 0 1px 1px rgba(0,0,0,.075);overflow: auto;border-radius: 4px;margin-top: 4px;"></textarea>
 			<div style="color:#555">(You can use $\LaTeX$ and markdown)</div>
 		</div>
 		<input type="hidden" name="parent_id" value="{{ id }}" />
@@ -156,8 +166,7 @@ $(document).ready(function(){
 			<br>
 			<input type="checkbox" name="anon" value="anon"> Post anonymously
 		</div>
-		<button class="btn-primary">Submit</button>
-		<button class="btn-primary">Cancel</button>
+		<div><button id="btnpost" style="margin-top:5px;" class="ppbutton" type="submit">Post</button></div>
 	</form>
 
 {%- endmacro %}
