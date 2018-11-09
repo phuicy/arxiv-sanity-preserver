@@ -135,7 +135,7 @@ $(document).ready(function(){
 {% endblock %}
 
 
-{% macro render_comment_box(id, gpid) -%}
+{% macro render_comment_box(id, gpid, level) -%}
 
 	<!-- functionality to add new comments -->
 	<form action="{{ url_for('comment') }}" method="post" class="comment-form">
@@ -150,7 +150,9 @@ $(document).ready(function(){
 			<textarea name="text" id="post-text" rows="15" style="width: 98.5%;font-size: 16px;padding: 6px 6px;color: #333;line-height1.42857143:;border: 1px solid #ccc;box-shadow: inset 0 1px 1px rgba(0,0,0,.075);overflow: auto;border-radius: 4px;margin-top: 4px;"></textarea>
 			<div style="color:#555">(You can use $\LaTeX$ and markdown)</div>
 		</div>
+		{% if level > 0 %}
 		<input type="hidden" name="parent_id" value="{{ id }}" />
+		{% endif %}
 		<input type="hidden" name="pid" value="{{ gpid }}" />
 		<br>
 		<div id="preview-wrap" style="display:none; margin-bottom:5px;">
@@ -215,7 +217,7 @@ $(document).ready(function(){
 
 			<!-- Textarea and submit -->
 			<div class="comment-submit">
-				{{ render_comment_box(comment._id , comment.gpid) }}
+				{{ render_comment_box(comment._id , comment.gpid, level+1) }}
 			</div>		
 		</div>
 	</div>
@@ -246,7 +248,7 @@ $(document).ready(function(){
   <!-- functionality to add new comments -->
   <div id="pitchin-cfa" style="background-color:#d7e5ff; padding: 10px; margin-top: 5px; border: 1px solid #b7c5e0; cursor: pointer;">Pitch in!</div>
   <div id="pitchin" style="padding: 5px 5px 10px 5px; border-radius: 0px 0px 5px 5px; display: none;">
-    {{ render_comment_box("", gpid) }}
+    {{ render_comment_box("", gpid, 0) }}
   </div>
 
   <!-- contains the discussion -->
