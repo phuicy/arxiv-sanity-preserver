@@ -409,10 +409,12 @@ def comment():
   print("Inserted Comment (" + str(post_id) + ") on Paper ("  + str(pid) + ") ")   
   
   # Add children to Parent
-  if parent_id is None:
+  if parent_id is not None:
       parent = comments.find_one({"pid": pid, "_id": parent_id})
       parent.children.insert(post_id)
-     
+  
+
+  app.logger.info('%s Posted comment to Paper %s ', username, str(pid) )  
   return 'OK'
 
 @app.route("/discussions", methods=['GET'])
