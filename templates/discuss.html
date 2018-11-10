@@ -84,7 +84,8 @@ function close_children_btn(elm, event) {
 
 function scroll_btn(elm) {
 	var id = elm.id;
-	$('.comment_' + id).find('#'+id).focus();
+	$('.comment_' + id).focus();
+	$('.comment_' + id).effect("highlight", {}, 3000);
 }
 
 // when page loads...
