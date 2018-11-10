@@ -335,10 +335,10 @@ def recursively_thread_comments(comment, comments, tags_collection, TAGS):
 	
 	# Add tags to comment
 	cc = [tags_collection.count({ 'comment_id':comment['_id'], 'tag_name':t }) for t in TAGS]
-    c['tag_counts'] = cc
-    c['tags'] = TAGS
+	c['tag_counts'] = cc
+	c['tags'] = TAGS
 	
-	app.logger.info("Found %s children of %s.", len(children), str(comment['_id']))
+	app.logger.debug("Found %s children of %s.", len(children), str(comment['_id']))
 	for child_id in children:
 		child = comments.find_one({"_id": ObjectId(child_id)})
 		child = recursively_thread_comments(child, comments)
