@@ -385,6 +385,7 @@ def comment():
   except Exception as e:
     print(e)
     return 'bad pid. This is most likely Andrej\'s fault.'
+	
 
   #Getting Parent
   parent_id = request.form.get('parent_id', None)
@@ -411,8 +412,11 @@ def comment():
   
   # Add children to Parent
   if parent_id is not None:
-      parent = comments.find_one({"_id": parent_id})
-      parent['children'].insert(post_id)
+      parent = comments.find_one({"_id": ObjectId(parent_id)})
+	  if parent is None:
+	    app.logger.debug("Parent comment not found in database. :(") 
+      else:		
+        parent['children'].insert(post_id)
   
 
   app.logger.info('%s Posted comment to Paper %s ', username, str(pid) )  
