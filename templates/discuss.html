@@ -79,19 +79,12 @@ function add_submit_btn(elm, event) {
 
 function close_children_btn(elm, event) {
 	var id = event.target.id;
-	$('.comment-children').find('#'+id).slideToggle("fast", function() { });
+	$('ul.comment-children').find('#'+id).slideToggle("fast", function() { });
 }
 
 function scroll_btn(elm, event) {
 	var id = event.target.id;
 	$('.comment').find('#'+id).focus();
-}
-
-function toggle_it(elm)
-{
-	var element =  $(elm).closest('.comment-group')
-			.find('#comments')
-	element.toggle('fast');
 }
 
 // when page loads...
@@ -110,9 +103,6 @@ $(document).ready(function(){
 		$("#pitchin").slideToggle("fast", function() { });
 	});
   
-	$('.toggling').click(function() {
-		toggle_it(this);
-	})
 	
 	$('div.comment-scroll').click(function(event) {
 		var group = $(this).closest('.comment-group'),
@@ -250,11 +240,7 @@ $(document).ready(function(){
 			<li>
 				{{ render_comment(child, level + 1) }}
 			</li>
-		{% if loop.last and comment.children|length > 2 %}
-		</div>
-		<button type="button" class="toggling"> show/hide replies </button>
-		{% endif %}
-	{% endfor %}
+		{% endfor %}
 	</ul>
 </div>
 
