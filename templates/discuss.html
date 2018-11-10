@@ -70,11 +70,9 @@ function renderPost() {
   if (typeof MathJax !== 'undefined') { MathJax.Hub.Queue(["Typeset",MathJax.Hub]); }
 }
 
-function add_submit_btn(elm) {
-	$(elm)
-		.closest('.comment-container')
-		.find('.comment-reply, .comment-submit')
-		.toggle();
+function add_submit_btn(elm, event) {
+	var id = event.target.id;
+	$('.comment-submit').find('#'+id).slideToggle("fast", function() { });
 }
 
 function toggle_it(elm)
@@ -125,8 +123,8 @@ $(document).ready(function(){
 		}, 1000);
 	}
 	
-	$('div.comment-reply button').click(function() {
-		add_submit_btn(this);
+	$('div.comment-reply button').click(function(event) {
+		add_submit_btn(this, event);
     });
 });
 
@@ -138,7 +136,7 @@ $(document).ready(function(){
 {% macro render_comment_box(id, gpid, level) -%}
 
 	<!-- functionality to add new comments -->
-	<form action="{{ url_for('comment') }}" method="post" class="comment-form">
+	<form action="{{ url_for('comment') }}" method="post" class="comment-form" id="{{id}}" >
 		<div>
 			<div class="piitemdo">- <b>DO</b>: Add helpful links to code, project page, or related discussion.</div>
 			<div class="piitemdo">- <b>DO</b>: Offer <u>constructive</u> comments on this work.</div>
@@ -210,7 +208,7 @@ $(document).ready(function(){
 		</div>
 		{% endif %}
 		<div class="comment-reply" style="display:inline-block; float: right;">
-			<button class="btn-primary comment-reply">Reply</button>
+			<button id={{comment._id}} class="btn-primary comment-reply">Reply</button>
 		</div>
 	</div>
 	<div class="cerr"></div>
