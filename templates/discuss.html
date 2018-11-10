@@ -202,18 +202,20 @@ $(document).ready(function(){
 				<button type="submit" class="ctag">{{ comment.tags[i] }}</button>
 			</form>
 		{% endfor %}
+		
+		<!-- Reply -->
+		{% if level %}
+		<div class="comment-scroll">
+			<button class="button-primary" style="display:inline-block; float: right;" >Scroll to parent</button>
+		</div>
+		{% endif %}
+		<div class="comment-reply" style="display:inline-block; float: right;">
+			<button class="btn-primary comment-reply">Reply</button>
+		</div>
 	</div>
 	<div class="cerr"></div>
 	
-	<!-- Reply -->
-	{% if level %}
-	<div class="comment-scroll">
-		<button class="button-primary">Scroll to parent</button>
-	</div>
-	{% endif %}
-	<div class="comment-reply">
-		<button class="btn-primary comment-reply">Reply</button>
-	</div>
+
 
 	<!-- Textarea and submit -->
 	<div class="comment-submit">
