@@ -17,9 +17,6 @@
 	div.comment-submit {
 		display: inline;
 	}
-	div.comment-children {
-		display: inline;
-	}
 	.table
 	{
 		width:50px;
@@ -79,7 +76,7 @@ function add_submit_btn(elm, event) {
 
 function close_children_btn(elm, event) {
 	var id = event.target.id;
-	$('ul.comment-children').find('#'+id).slideToggle("fast", function() { });
+	$('div.comment-children').find('#'+id).slideToggle("fast", function() { });
 }
 
 function scroll_btn(elm, event) {
@@ -134,7 +131,7 @@ $(document).ready(function(){
 		scroll_btn(this, event);
     });
 	
-	$('button.comment-close-children button').click(function(event) {
+	$('div.comment-close-children button').click(function(event) {
 		close_children_btn(this, event);
     });
 });
@@ -220,7 +217,7 @@ $(document).ready(function(){
 		{% endif %}
 		{% if comment.children|length > 0 %}
 		<div class="comment-close-children" style="display:inline-block; float: right;">
-			<button id={{comment._id}} class="comment-close-children">Toggle Children</button>
+			<button id={{comment._id}} class="btn-primary comment-close-children">Toggle Children</button>
 		</div>
 		{% endif %}
 		<div class="comment-reply" style="display:inline-block; float: right;">
@@ -235,13 +232,15 @@ $(document).ready(function(){
 	</div>	
 
 	<!-- Render children -->
-	<ul class="comment-children" id="{{comment._id}}" style="display:inline-block;">
-		{% for child in comment.children %}
-			<li>
-				{{ render_comment(child, level + 1) }}
-			</li>
-		{% endfor %}
-	</ul>
+	<div class="comment-children" id={{comment._id}}  style="display:inline-block;">
+		<ul>
+			{% for child in comment.children %}
+				<li>
+					{{ render_comment(child, level + 1) }}
+				</li>
+			{% endfor %}
+		</ul>
+	</div>
 </div>
 
 
