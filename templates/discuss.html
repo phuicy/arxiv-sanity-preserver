@@ -17,7 +17,7 @@
 	div.comment-submit {
 		display: inline;
 	}
-	div.comment-children {
+	div.children {
 		display: inline;
 	}
 	.table
@@ -79,7 +79,7 @@ function add_submit_btn(elm, event) {
 
 function close_children_btn(elm, event) {
 	var id = event.target.id;
-	$('div.comment-children').find('#'+id).slideToggle("fast", function() { });
+	$('div.children').find('#'+id).slideToggle("fast", function() { });
 }
 
 function scroll_btn(elm, event) {
@@ -235,7 +235,7 @@ $(document).ready(function(){
 	</div>	
 
 	<!-- Render children -->
-	<div class="comment-children" id={{comment._id}}>
+	<div class="children" id={{comment._id}}>
 		<ul>
 			{% for child in comment.children %}
 				<li>
