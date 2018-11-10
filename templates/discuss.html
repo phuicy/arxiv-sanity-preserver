@@ -245,19 +245,17 @@ $(document).ready(function(){
 	</div>	
 
 	<!-- Render children -->
-	<div class="comment-children" id="{{comment._id}}" style="display:inline-block;" >
-		<ul>
-			{% for child in comment.children %}
-				<li>
-					{{ render_comment(child, level + 1) }}
-				</li>
-			{% if loop.last and comment.children|length > 2 %}
-			</div>
-			<button type="button" class="toggling"> show/hide replies </button>
-			{% endif %}
-		{% endfor %}
-		</ul>
-	</div>
+	<ul class="comment-children" id="{{comment._id}}" style="display:inline-block;">
+		{% for child in comment.children %}
+			<li>
+				{{ render_comment(child, level + 1) }}
+			</li>
+		{% if loop.last and comment.children|length > 2 %}
+		</div>
+		<button type="button" class="toggling"> show/hide replies </button>
+		{% endif %}
+	{% endfor %}
+	</ul>
 </div>
 
 
