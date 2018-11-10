@@ -193,6 +193,8 @@ $(document).ready(function(){
 	<div class="ctags">
 		{% for i in range(comment.tags|length) %}
 			<div class="ctag-count {% if comment.tag_counts[i] == 0 %}ctag-count-zero{% endif %} ">
+				{{comment.tag_counts[i]}}
+			</div>
 			<form action="/toggletag" method="post">
 				<input type="hidden" name="comment._id" value="{{ id }}" />
 				<input type="hidden" name="pid" value="{{ gpid }}" />
