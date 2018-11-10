@@ -245,7 +245,7 @@ $(document).ready(function(){
 	</div>	
 
 	<!-- Render children -->
-	<div class="comment-children" id="{{comment._id}}">
+	<div class="comment-children" id="{{comment._id}}" style="display:inline-block;" >
 		<ul>
 			{% for child in comment.children %}
 				<li>
