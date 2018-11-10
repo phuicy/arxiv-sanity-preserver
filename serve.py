@@ -332,8 +332,9 @@ def rank(request_pid=None):
 def recursively_thread_comments(comment, comments):
 	children = comment['children'].copy()
 	comment['children'].clear()
+    app.logger.debug("Find %s children.", len(children))
 	for child_id in children:
-		child = comments.find_one({"pid": comment.pid, "_id": ObjectId(child_id)})
+		child = comments.find_one({"_id": ObjectId(child_id)})
 		child = recursively_thread_comments(child, comments)
 		comment['children'].append(child)
 	return comment 
