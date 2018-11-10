@@ -196,7 +196,7 @@ $(document).ready(function(){
 				{{comment.tag_counts[i]}}
 			</div>
 			<form action="/toggletag" method="post">
-				<input type="hidden" name="comment._id" value="{{ id }}" />
+				<input type="hidden" name="comment_id" value="{{ comment._id }}" />
 				<input type="hidden" name="pid" value="{{ gpid }}" />
 				<input type="hidden" name="tag_name" value="{{ comment.tags[i] }}" />
 				<button type="submit" class="ctag">{{ comment.tags[i] }}</button>
