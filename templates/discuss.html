@@ -74,6 +74,16 @@ function add_submit_btn(elm, event) {
 	$('.comment-submit').find('#'+id).slideToggle("fast", function() { });
 }
 
+function close_children_btn(elm, event) {
+	var id = event.target.id;
+	$('.comment-children').find('#'+id).slideToggle("fast", function() { });
+}
+
+function scroll_btn(elm, event) {
+	var id = event.target.id;
+	$('.comment').find('#'+id).focus() );
+}
+
 function toggle_it(elm)
 {
 	var element =  $(elm).closest('.comment-group')
@@ -100,7 +110,8 @@ $(document).ready(function(){
 	$('.toggling').click(function() {
 		toggle_it(this);
 	})
-	$('div.comment-scroll').click(function() {
+	
+	$('div.comment-scroll').click(function(event) {
 		var group = $(this).closest('.comment-group'),
 				nextgroup = group.parent().closest('.comment-group');
 		if (nextgroup.length) {
@@ -124,6 +135,14 @@ $(document).ready(function(){
 	
 	$('div.comment-reply button').click(function(event) {
 		add_submit_btn(this, event);
+    });
+	
+	$('div.comment-scroll button').click(function(event) {
+		scroll_btn(this, event);
+    });
+	
+	$('div.comment-close-children button').click(function(event) {
+		close_children_btn(this, event);
     });
 });
 
@@ -202,8 +221,13 @@ $(document).ready(function(){
 		
 		<!-- Reply -->
 		{% if level %}
-		<div class="comment-scroll">
-			<button class="button-primary" style="display:inline-block; float: right;" >Scroll to parent</button>
+		<div class="comment-scroll" style="display:inline-block; float: right;" >
+			<button id={{comment.parent}} class="button-primary" >Scroll to parent</button>
+		</div>
+		{% endif %}
+		{% if comment.children|length > 0 %}
+		<div class="comment-close-children" style="display:inline-block; float: right;">
+			<button id={{comment._id}} class="btn-primary comment-close-children">Toggle Children</button>
 		</div>
 		{% endif %}
 		<div class="comment-reply" style="display:inline-block; float: right;">
@@ -218,17 +242,19 @@ $(document).ready(function(){
 	</div>	
 
 	<!-- Render children -->
-	<ul>
-		{% for child in comment.children %}
-			<li>
-				{{ render_comment(child, level + 1) }}
-			</li>
-		{% if loop.last and comment.children|length > 2 %}
-		</div>
-		<button type="button" class="toggling"> show/hide replies </button>
-		{% endif %}
-	{% endfor %}
-	</ul>
+	<div class="comment-children" id="{{comment._id}}">
+		<ul>
+			{% for child in comment.children %}
+				<li>
+					{{ render_comment(child, level + 1) }}
+				</li>
+			{% if loop.last and comment.children|length > 2 %}
+			</div>
+			<button type="button" class="toggling"> show/hide replies </button>
+			{% endif %}
+		{% endfor %}
+		</ul>
+	</div>
 </div>
 
 
