@@ -134,7 +134,7 @@ $(document).ready(function(){
 		scroll_btn(this, event);
     });
 	
-	$('div.comment-close-children button').click(function(event) {
+	$('button.comment-close-children button').click(function(event) {
 		close_children_btn(this, event);
     });
 });
@@ -220,7 +220,7 @@ $(document).ready(function(){
 		{% endif %}
 		{% if comment.children|length > 0 %}
 		<div class="comment-close-children" style="display:inline-block; float: right;">
-			<button id={{comment._id}} class="btn-primary comment-close-children">Toggle Children</button>
+			<button id={{comment._id}} class="comment-close-children">Toggle Children</button>
 		</div>
 		{% endif %}
 		<div class="comment-reply" style="display:inline-block; float: right;">
