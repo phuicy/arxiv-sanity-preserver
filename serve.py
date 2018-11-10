@@ -420,7 +420,7 @@ def comment():
     if parent is None:
       app.logger.debug("Parent comment not found in database. :(") 
     else:		
-      parent['children'].append(post_id)
+      parent['children'].append(str(post_id))
       children_update_value = { "$set": { "children": parent['children'] } }
       comments.update_one(parent_query, children_update_value)
       app.logger.debug("Added child %s to parent %s.",str(post_id),parent_id)
