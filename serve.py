@@ -333,9 +333,9 @@ def recursively_thread_comments(comment, comments):
 	children = comment['children'].copy()
 	comment['children'].clear()
 	for child_id in children:
-		child = comments.find_one({"pid": comment.pid, "_id": child_id})
+		child = comments.find_one({"pid": comment.pid, "_id": ObjectId(child_id)})
 		child = recursively_thread_comments(child, comments)
-		comment['children'].insert(child)
+		comment['children'].append(child)
 	return comment 
 
 @app.route('/discuss', methods=['GET'])
