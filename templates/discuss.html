@@ -182,7 +182,7 @@ $(document).ready(function(){
 
 {% macro render_comment(comment, level=0) -%}
 <!-- Comment scroll -->	
-<div class="comment comment_{{comment._id}}" id="{{comment._id}}">
+<div class="comment" id="{{comment._id}}">
 	<div class="caction">
 		<a href="discuss?id={{comment.gpid}}&cid={{ comment._id }}">
 			<img src="static/linkto.png" alt="link to this comment">
@@ -194,7 +194,7 @@ $(document).ready(function(){
 		<div class="cver">v{{ comment.version }}</div>
 		<div class="cconf">{{ comment.conf }}</div>
 	</div>
-	<div class="ctext">
+	<div class="ctext comment_{{comment._id}}">
 		{{ comment.text|markdownify|safe }}
 	</div>
 	<div class="ctags">
