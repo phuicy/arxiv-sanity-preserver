@@ -79,11 +79,11 @@ function add_submit_btn(elm, event) {
 
 function close_children_btn(elm, event) {
 	var id = event.target.id;
-	$('div.children').find('#'+id).slideToggle("fast", function() { });
+	$('.childrenOf'+id).slideToggle("fast", function() { });
 }
 
 function scroll_btn(elm, event) {
-	var id = event.target.id;
+	var id = elm.id;
 	$('.comment').find('#'+id).focus();
 }
 
@@ -235,7 +235,7 @@ $(document).ready(function(){
 	</div>	
 
 	<!-- Render children -->
-	<div class="children" id={{comment._id}}>
+	<div class="childrenOf{{comment._id}}" style="display:inline;">
 		<ul>
 			{% for child in comment.children %}
 				<li>
