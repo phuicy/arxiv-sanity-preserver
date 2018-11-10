@@ -329,9 +329,15 @@ def rank(request_pid=None):
   ctx = default_context(papers, render_format='paper')
   return render_template('main.html', **ctx)
 
-def recursively_thread_comments(comment, comments):
+def recursively_thread_comments(comment, comments, tags_collection, TAGS):
 	children = comment['children'].copy()
 	comment['children'].clear()
+	
+	# Add tags to comment
+	cc = [tags_collection.count({ 'comment_id':comment['_id'], 'tag_name':t }) for t in TAGS]
+    c['tag_counts'] = cc
+    c['tags'] = TAGS
+	
 	app.logger.info("Found %s children of %s.", len(children), str(comment['_id']))
 	for child_id in children:
 		child = comments.find_one({"_id": ObjectId(child_id)})
@@ -352,14 +358,9 @@ def discuss():
     c['_id'] = str(c['_id']) # have to convert these to strs from ObjectId, and backwards later http://api.mongodb.com/python/current/tutorial.html
 
   # fetch the comments children, turn child ids to instances.     
-  comms[:] = [ recursively_thread_comments(c, comments) for c in comms ]
+  comms[:] = [ recursively_thread_comments(c, comments, tags_collection, TAGS) for c in comms ]
 
-  # fetch the counts for all tags
-  tag_counts = []
-  for c in comms:
-    cc = [tags_collection.count({ 'comment_id':c['_id'], 'tag_name':t }) for t in TAGS]
-    c['tag_counts'] = cc
-    c['tags'] = TAGS
+  # Blank message
   msg = ''
 
   # and render
