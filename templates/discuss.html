@@ -17,6 +17,9 @@
 	div.comment-submit {
 		display: inline;
 	}
+	div.comment-children {
+		display: inline;
+	}
 	.table
 	{
 		width:50px;
@@ -232,7 +235,7 @@ $(document).ready(function(){
 	</div>	
 
 	<!-- Render children -->
-	<div class="comment-children" id={{comment._id}}  style="display:inline-block;">
+	<div class="comment-children" id={{comment._id}}>
 		<ul>
 			{% for child in comment.children %}
 				<li>
