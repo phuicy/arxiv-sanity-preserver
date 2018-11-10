@@ -136,7 +136,7 @@ $(document).ready(function(){
 {% macro render_comment_box(id, gpid, level) -%}
 
 	<!-- functionality to add new comments -->
-	<form action="{{ url_for('comment') }}" method="post" class="comment-form" id="{{id}}" >
+	<form action="{{ url_for('comment') }}" method="post" {% if level > 0 %} class="comment-form" id="{{id}}" {% endif %} >
 		<div>
 			<div class="piitemdo">- <b>DO</b>: Add helpful links to code, project page, or related discussion.</div>
 			<div class="piitemdo">- <b>DO</b>: Offer <u>constructive</u> comments on this work.</div>
