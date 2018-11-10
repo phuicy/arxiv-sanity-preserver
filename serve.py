@@ -418,7 +418,7 @@ def comment():
     if parent is None:
       app.logger.debug("Parent comment not found in database. :(") 
     else:		
-      parent['children'].insert(post_id)
+      parent['children'].append(post_id)
   
 
   app.logger.info('%s Posted comment to Paper %s ', username, str(pid) )  
