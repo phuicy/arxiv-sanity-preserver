@@ -82,9 +82,9 @@ function close_children_btn(elm, event) {
 	$('.childrenOf'+id).slideToggle("fast", function() { });
 }
 
-function scroll_btn(elm, event) {
+function scroll_btn(elm) {
 	var id = elm.id;
-	$('.comment').find('#'+id).focus();
+	$('.comment_' + id).find('#'+id).focus();
 }
 
 // when page loads...
@@ -104,15 +104,8 @@ $(document).ready(function(){
 	});
   
 	
-	$('div.comment-scroll').click(function(event) {
-		var group = $(this).closest('.comment-group'),
-				nextgroup = group.parent().closest('.comment-group');
-		if (nextgroup.length) {
-			group = nextgroup;
-		}
-		$('html, body').animate({
-			scrollTop: group.offset().top + 'px',
-		});
+	$('div.comment-scroll').click(function() {
+		scroll_btn(this)
 	});
   
 	// periodically try to render a preview of the post 
@@ -184,7 +177,7 @@ $(document).ready(function(){
 
 {% macro render_comment(comment, level=0) -%}
 <!-- Comment scroll -->	
-<div class="comment" id="{{comment._id}}">
+<div class="comment comment_{{comment._id}}" id="{{comment._id}}">
 	<div class="caction">
 		<a href="discuss?id={{comment.gpid}}&cid={{ comment._id }}">
 			<img src="static/linkto.png" alt="link to this comment">
