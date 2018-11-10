@@ -12,7 +12,7 @@ volumes:
       name: thumbs
   data:
     external:
-      name: data
+      name: data2
 
 services:
     arxiv-sanity:
