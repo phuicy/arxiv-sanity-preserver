@@ -174,68 +174,64 @@ $(document).ready(function(){
 {%- endmacro %}
 
 {% macro render_comment(comment, level=0) -%}
-<div class="comment-group">
-	<div class="comment-container" id="{{comment._id}}">
-		<!-- Comment scroll -->	
-		<div class="comment">
-			<div class="caction">
-				<a href="discuss?id={{comment.gpid}}&cid={{ comment._id }}">
-					<img src="static/linkto.png" alt="link to this comment">
-				</a>
-			</div>
-			<div class="cheader">
-				<div class="cuser">@{{ comment.user }}</div>
-				<div class="ctime">{{ comment.time_posted }}</div>
-				<div class="cver">v{{ comment.version }}</div>
-				<div class="cconf">{{ comment.conf }}</div>
-			</div>
-			<div class="ctext">
-				{{ comment.text|markdownify|safe }}
-			</div>
-			<div class="ctags">
-				{% for i in range(comment.tags|length) %}
-					<div class="ctag-count {% if comment.tag_counts[i] == 0 %}ctag-count-zero{% endif %} ">
-					<form action="/toggletag" method="post">
-						<input type="hidden" name="comment._id" value="{{ id }}" />
-						<input type="hidden" name="pid" value="{{ gpid }}" />
-						<input type="hidden" name="tag_name" value="{{ comment.tags[i] }}" />
-						<button type="submit" class="ctag">{{ comment.tags[i] }}</button>
-					</form>
-				{% endfor %}
-			</div>
-			<div class="cerr"></div>
-			
-			<!-- Reply -->
-			{% if level %}
-			<div class="comment-scroll">
-				<button class="button-primary">Scroll to parent</button>
-			</div>
-			{% endif %}
-			<div class="comment-reply">
-				<button class="btn-primary comment-reply">Reply</button>
-			</div>
-
-			<!-- Textarea and submit -->
-			<div class="comment-submit">
-				{{ render_comment_box(comment._id , comment.gpid, level+1) }}
-			</div>		
-		</div>
+<!-- Comment scroll -->	
+<div class="comment" id="{{comment._id}}">
+	<div class="caction">
+		<a href="discuss?id={{comment.gpid}}&cid={{ comment._id }}">
+			<img src="static/linkto.png" alt="link to this comment">
+		</a>
 	</div>
-	<!-- Render children -->
+	<div class="cheader">
+		<div class="cuser">@{{ comment.user }}</div>
+		<div class="ctime">{{ comment.time_posted }}</div>
+		<div class="cver">v{{ comment.version }}</div>
+		<div class="cconf">{{ comment.conf }}</div>
+	</div>
+	<div class="ctext">
+		{{ comment.text|markdownify|safe }}
+	</div>
+	<div class="ctags">
+		{% for i in range(comment.tags|length) %}
+			<div class="ctag-count {% if comment.tag_counts[i] == 0 %}ctag-count-zero{% endif %} ">
+			<form action="/toggletag" method="post">
+				<input type="hidden" name="comment._id" value="{{ id }}" />
+				<input type="hidden" name="pid" value="{{ gpid }}" />
+				<input type="hidden" name="tag_name" value="{{ comment.tags[i] }}" />
+				<button type="submit" class="ctag">{{ comment.tags[i] }}</button>
+			</form>
+		{% endfor %}
+	</div>
+	<div class="cerr"></div>
+	
+	<!-- Reply -->
+	{% if level %}
+	<div class="comment-scroll">
+		<button class="button-primary">Scroll to parent</button>
+	</div>
+	{% endif %}
+	<div class="comment-reply">
+		<button class="btn-primary comment-reply">Reply</button>
+	</div>
 
-	{% for child in comment.children %}
-		{% if loop.first and comment.children|length > 2 %}
-		<div id="comments">
-		{% endif %}
-		{{ render_comment(child, level + 1) }}
+	<!-- Textarea and submit -->
+	<div class="comment-submit">
+		{{ render_comment_box(comment._id , comment.gpid, level+1) }}
+	</div>	
+
+	<!-- Render children -->
+	<ul>
+		{% for child in comment.children %}
+			<li>
+				{{ render_comment(child, level + 1) }}
+			</li>
 		{% if loop.last and comment.children|length > 2 %}
 		</div>
 		<button type="button" class="toggling"> show/hide replies </button>
 		{% endif %}
-
 	{% endfor %}
-
+	</ul>
 </div>
+
 
 {%- endmacro %}
 
@@ -257,10 +253,15 @@ $(document).ready(function(){
 	<div class="comment-section">
 		{%  if comments|length ==0 %}
 			<p> Nothing here yet. </p>
+		{% else %}
+			<ul>
+			{% for comment in comments %}
+				 <li>
+				{{ render_comment(comment) }}
+				</li>
+			{% endfor %}
 		{% endif %}
-        {% for comment in comments %}
-            {{ render_comment(comment) }}
-        {% endfor %}
+		</ul>
     </div>
   </div>
 </div>
