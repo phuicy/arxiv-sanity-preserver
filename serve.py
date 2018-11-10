@@ -429,6 +429,10 @@ def comment():
   app.logger.info('%s Posted comment to Paper %s ', username, str(pid) )  
   return 'OK'
 
+@app.template_filter('ctime')
+def timectime(s):
+    return time.ctime(s) # datetime.datetime.fromtimestamp(s)  
+
 @app.route("/discussions", methods=['GET'])
 def discussions():
   # return most recently discussed papers

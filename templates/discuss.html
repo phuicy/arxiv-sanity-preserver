@@ -180,7 +180,7 @@ $(document).ready(function(){
 	</div>
 	<div class="cheader">
 		<div class="cuser">@{{ comment.user }}</div>
-		<div class="ctime">{{ comment.time_posted }}</div>
+		<div class="ctime">{{ comment.time_posted | ctime }}</div>
 		<div class="cver">v{{ comment.version }}</div>
 		<div class="cconf">{{ comment.conf }}</div>
 	</div>
