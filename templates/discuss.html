@@ -43,7 +43,6 @@
 // passed in from flask as json
 var tweets = {{ tweets | tojson }};
 var papers = {{ papers | tojson }};
-var comments = {{ comments | tojson }};
 var render_format = "{{ render_format }}";
 var username = "{{ g.user.username }}";
 var msg = "{{ msg }}";
