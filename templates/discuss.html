@@ -142,6 +142,9 @@ $(document).ready(function(){
 	
 	{% if cid is not none %}
 		$('.comment_{{cid}}').focus();
+		$('html,body').animate({
+		   scrollTop: $('.comment_{{cid}}').offset().top
+		});
 		$('.comment_{{cid}}').effect("highlight", {}, 5000);
 	{% endif %}
 });
