@@ -351,7 +351,7 @@ def discuss():
   pid = request.args.get('id', '') # paper id of paper we wish to discuss
   papers = [db[pid]] if pid in db else []
   
-  cid = request.args.get('cid', '') # comment id
+  cid = request.args.get('cid', None) # comment id
 
   # fetch the comments
   comms_cursor = comments.find({ 'pid':pid, 'parent': None }).sort([('time_posted', pymongo.DESCENDING)])

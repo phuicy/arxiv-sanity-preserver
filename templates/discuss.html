@@ -140,7 +140,7 @@ $(document).ready(function(){
 		close_children_btn(this, event);
     });
 	
-	{% if cid is not '' %}
+	{% if cid is not None %}
 		$('.comment_' + {{cid}}).focus();
 		$('.comment_' + {{cid}}).effect("highlight", {}, 5000);
 	{% endif %}
