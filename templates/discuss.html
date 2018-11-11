@@ -241,7 +241,7 @@ $(document).ready(function(){
 	
 		<ul  style="background:transparent url({{ url_for('static', filename='graypixel.png') }}) repeat-y 15px 0;  margin-bottom:10px;" >
 			{% for child in comment.children %}
-				<li style="background:transparent url({{ url_for('static', filename='graypixel.png') }}) repeat-x 0 8px; font-size:13px; margin:4px 0 4px 5px; padding:0 0 0 20px;">
+				<li style="background:transparent url({{ url_for('static', filename='graypixel.png') }}) repeat-x 0 8px; font-size:13px; margin:4px 0 4px -24px; padding:0 0 0 20px; list-style: none;">
 					{{ render_comment(child, level + 1) }}
 				</li>
 			{% endfor %}
