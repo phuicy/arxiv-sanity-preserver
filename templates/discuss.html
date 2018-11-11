@@ -46,7 +46,7 @@
 	}
 	.ctagButton
 	{
-		display: none;
+		border: none;
 	}
 </style>
 
@@ -271,7 +271,7 @@ $(document).ready(function(){
 		{%  if comments|length ==0 %}
 			<p> Nothing here yet. </p>
 		{% else %}
-			<ul>
+			<ul style="list-style:none" >
 			{% for comment in comments %}
 				 <li>
 				{{ render_comment(comment) }}
