@@ -44,6 +44,10 @@
 	{
 		display:none;
 	}
+	.ctagButton
+	{
+		display: none;
+	}
 </style>
 
 <script>
@@ -206,7 +210,7 @@ $(document).ready(function(){
 				<input type="hidden" name="comment_id" value="{{ comment._id }}" />
 				<input type="hidden" name="pid" value="{{ gpid }}" />
 				<input type="hidden" name="tag_name" value="{{ comment.tags[i] }}" />
-				<button type="submit" class="ctag">{{ comment.tags[i] }}</button>
+				<button type="submit" class="ctagButton">{{ comment.tags[i] }}</button>
 			</form>
 		{% endfor %}
 		
@@ -234,9 +238,10 @@ $(document).ready(function(){
 
 	<!-- Render children -->
 	<div class="childrenOf{{comment._id}}" style="display:inline;">
-		<ul>
+	
+		<ul  style="background:transparent url({{ url_for('static', filename='graypixel.png') }}) repeat-y 15px 0;  margin-bottom:10px;" >
 			{% for child in comment.children %}
-				<li>
+				<li style="background:transparent url({{ url_for('static', filename='graypixel.png') }}) repeat-x 0 8px; font-size:13px; margin:4px 0 4px 5px; padding:0 0 0 20px;">
 					{{ render_comment(child, level + 1) }}
 				</li>
 			{% endfor %}
