@@ -350,6 +350,8 @@ def discuss():
   """ return discussion related to a paper """
   pid = request.args.get('id', '') # paper id of paper we wish to discuss
   papers = [db[pid]] if pid in db else []
+  
+  cid = request.args.get('cid', '') # comment id
 
   # fetch the comments
   comms_cursor = comments.find({ 'pid':pid, 'parent': None }).sort([('time_posted', pymongo.DESCENDING)])
@@ -364,7 +366,7 @@ def discuss():
   msg = ''
 
   # and render
-  ctx = default_context(papers, render_format='default', comments=comms, gpid=pid, msg=msg )
+  ctx = default_context(papers, render_format='default', comments=comms, gpid=pid, msg=msg, cid=cid )
   return render_template('discuss.html', **ctx)
 
 @app.route('/comment', methods=['POST'])

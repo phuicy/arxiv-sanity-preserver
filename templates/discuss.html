@@ -139,6 +139,11 @@ $(document).ready(function(){
 	$('div.comment-close-children button').click(function(event) {
 		close_children_btn(this, event);
     });
+	
+	{% if cid is not '' %}
+		$('.comment_' + {{cid}}).focus();
+		$('.comment_' + {{cid}}).effect("highlight", {}, 5000);
+	{% endif %}
 });
 
 </script>
